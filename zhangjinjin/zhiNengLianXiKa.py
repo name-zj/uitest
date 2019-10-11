@@ -10,8 +10,9 @@ import traceback
 import time
 
 
-# 显示等待 & 点击
 def obvious_wait_click(driver, xpath, prompt):
+    """显示等待 & 点击"""
+
     locat = WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, xpath)), prompt)
     driver.execute_script("arguments[0].click();", locat)
 
@@ -34,8 +35,8 @@ print("----->登录")
 num = 0
 
 
-# 判断是否是小结页
 def small_knot_page(driver):
+    """判断是否是小结页"""
     fnext = 1
     try:
         print("----->不是题目页面")
@@ -52,8 +53,8 @@ def small_knot_page(driver):
         return fnext
 
 
-# 定义查询下一题按钮方法，1表示出现，0表示不出现
 def find_next(driver):
+    """定义查询下一题按钮方法，1表示出现，0表示不出现"""
     fnext = 1
     print("----->检测是否出现题目")
     try:
@@ -68,6 +69,7 @@ def find_next(driver):
 
 # 提交报告弹窗处理
 def submit_report(driver):
+    """提交报告弹窗"""
     note = 0
     try:
         WebDriverWait(driver, 1).until(EC.presence_of_element_located((By.XPATH, "/html/body/div[5]/div/div[2]/div/div[1]/div/div/div[2]/button[2]")))
