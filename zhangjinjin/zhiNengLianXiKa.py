@@ -47,8 +47,6 @@ def small_knot_page(driver):
 
         print("----->下一题")
     except:
-        print("----->找不到下一题按钮")
-        print("----->报告页")
         fnext = 0
     finally:
         return fnext
@@ -66,22 +64,19 @@ def find_next(driver):
         fnext = small_knot_page(driver)
     finally:
         return fnext
-    # time.sleep(2)
-    # s = driver.find_elements_by_xpath("//*[@id='root']/div/div/div[2]/div/div[2]/div/div/div/div[2]/div/a[2]")
-    # if len(s) == 1:
-    #     print("----->找到下一题按钮")
-    #     return 1
-    # elif len(s) == 0:
-    #     print("----->判断是否是小结页")
-    #     time.sleep(2)
-    #     s1 = driver.find_elements_by_xpath("//*[@id='root']/div/div/div[2]/div/div/div/div/div/div[2]/div/a[2]")
-    #     if len(s1) == 1:
-    #         print("----->是小结页")
-    #         obvious_wait_click(driver, "//*[@id='root']/div/div/div[2]/div/div/div/div/div/div[2]/div/a[2]", "小结页下一题按钮")
-    #         obvious_wait_click(driver, "/html/body/div[5]/div/div[2]/div/div[1]/div/div/div[2]/button[2]", "无法点击确认弹窗按钮")
-    #     elif len(s1) == 0:
-    #         print("----->不是小结页")
-    #         return 0
+
+
+# 提交报告弹窗处理
+def submit_report(driver):
+    note = 0
+    try:
+        WebDriverWait(driver, 1).until(EC.presence_of_element_located((By.XPATH, "/html/body/div[5]/div/div[2]/div/div[1]/div/div/div[2]/button[2]")))
+        obvious_wait_click(driver, "/html/body/div[5]/div/div[2]/div/div[1]/div/div/div[2]/button[2]", "无法点击提交报告弹窗")
+        note = 1
+    except:
+        note = 0
+    finally:
+        return note
 
 
 # 循环做题
@@ -99,11 +94,16 @@ while find_next(driver):
         time.sleep(1)
         print("----->点击下一题按钮")
         obvious_wait_click(driver, "//*[@id='root']/div/div/div[2]/div/div[2]/div/div/div/div[2]/div/a[2]", "无法点击题目下一题按钮")
-        time.sleep(1)
+
+        # 判断是否出现提交报告弹窗
+        note = submit_report(driver)
+        if note == 1:
+            print("----->报告页")
+            break
     except:
         traceback.print_exc()
         break
 
 
 time.sleep(2)
-driver.quit()
+driver.close()
